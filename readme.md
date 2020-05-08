@@ -1,11 +1,11 @@
-Problem Statement
+##Problem Statement
 To build a classification methodology to determine whether a customer is placing a fraudulent insurance claim.
 Architecture
 
-Data Description
+##Data Description
 The client will send data in multiple sets of files in batches at a given location. The data has been extracted from the census bureau.
 The data contains the following attributes:
-Features:
+##Features:
 
 1.	months_as_customer: It denotes the number of months for which the customer is associated with the insurance company.
 2.	age: continuous. It denotes the age of the person.
@@ -13,7 +13,6 @@ Features:
 4.	policy_bind_date: Start date of the policy.
 5.	policy_state: The state where the policy is registered.
 6.	policy_csl-combined single limits. How much of the bodily injury will be covered from the total damage.
-https://www.berkshireinsuranceservices.com/arecombinedsinglelimitsbetter
 7.	policy_deductable: The amount paid out of pocket by the policy-holder before an insurance provider will pay any expenses.
 8.	policy_annual_premium: The yearly premium for the policy.
 9.	umbrella_limit: An umbrella insurance policy is extra liability insurance coverage that goes beyond the limits of the insured's homeowners, auto or watercraft insurance. It provides an additional layer of security to those who are at risk of being sued for damages to other people's property or injuries caused to others in an accident.
@@ -47,13 +46,13 @@ https://www.berkshireinsuranceservices.com/arecombinedsinglelimitsbetter
 37.	auto_year: The year of manufacture of the vehicle.
 
 
-Target Label:
+##Target Label:
 Whether the claim is fraudulent or not.
 38.	fraud_reported:  Y or N
 Apart from training files, we also require a "schema" file from the client, which contains all the relevant information about the training files such as:
 Name of the files, Length of Date value in FileName, Length of Time value in FileName, Number of Columns, Name of the Columns, and their datatype.
 
-Data Validation
+##Data Validation
 In this step, we perform different sets of validation on the given set of training files.
 1.	 Name Validation- We validate the name of the files based on the given name in the schema file. We have created a regex pattern as per the name given in the schema file to use for validation. After validating the pattern in the name, we check for the length of date in the file name as well as the length of time in the file name. If all the values are as per requirement, we move such files to "Good_Data_Folder" else we move such files to "Bad_Data_Folder."
 
@@ -72,7 +71,7 @@ Data Insertion in Database
 2) Table creation in the database - Table with name - "Good_Data", is created in the database for inserting the files in the "Good_Data_Folder" based on given column names and datatype in the schema file. If the table is already present, then the new table is not created, and new files are inserted in the already present table as we want training to be done on new as well as old training files.
 3) Insertion of files in the table - All the files in the "Good_Data_Folder" are inserted in the above-created table. If any file has invalid data type in any of the columns, the file is not loaded in the table and is moved to "Bad_Data_Folder".
 
-Model Training
+##Model Training
 1) Data Export from Db - The data in a stored database is exported as a CSV file to be used for model training.
 2) Data Preprocessing
 a)	Drop the columns not required for prediction.
@@ -87,7 +86,7 @@ The Kmeans model is trained over preprocessed data, and the model is saved for f
 
 
 
-Prediction Data Description
+##Prediction Data Description
  The Client will send the data in multiple sets of files in batches at a given location. Data will contain the annual income of various persons.
 Apart from prediction files, we also require a "schema" file from the client, which contains all the relevant information about the training files such as:
 Name of the files, Length of Date value in FileName, Length of Time value in FileName, Number of Columns, Name of the Columns and their datatype.
@@ -102,7 +101,9 @@ Data Insertion in Database
 1) Database Creation and connection - Create a database with the given name passed. If the database is already created, open the connection to the database.
 2) Table creation in the database - Table with name - "Good_Data", is created in the database for inserting the files in the "Good_Data_Folder" based on given column names and datatype in the schema file. If the table is already present, then a new table is not created, and new files are inserted into the already present table as we want training to be done on new as well old training files.
 3) Insertion of files in the table - All the files in the "Good_Data_Folder" are inserted in the above-created table. If any file has invalid data type in any of the columns, the file is not loaded in the table and is moved to "Bad_Data_Folder".
-Prediction
+
+
+##Prediction
 1) Data Export from Db - The data in the stored database is exported as a CSV file to be used for prediction.
 2) Data Preprocessing  :
 a)	Drop the columns not required for prediction.
@@ -112,4 +113,4 @@ d)	Replace and encode the categorical values with numeric values.
 e)	Scale the numeric values using the standard scaler.
 3) Clustering - KMeans model created during training is loaded, and clusters for the preprocessed prediction data is predicted.
 4) Prediction - Based on the cluster number, the respective model is loaded and is used to predict the data for that cluster.
-5) Once the prediction is made for all the clusters, the predictions along with the Wafer names are saved in a CSV file at a given location, and the location is returned to the client.
+5) Once the prediction is made for all the clusters, the predictions along with the target values  are saved in a CSV file at a given location, and the location is returned to the client.
